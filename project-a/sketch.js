@@ -11,12 +11,15 @@ let sharkX = -200;
 let sharkVisible = true;
 let chaseRadius = 140;
 let lerpAmount = 0.05;
+let fishY = 0;
+let bubbleX = -100;
+let bubbleY = -100;
+let bubbleVisible = false;
 
 function setup() {
-  sharkY = random(250, height); // initial shark Y position
-   let canvas = createCanvas(800, 500);
-   canvas.parent ("p5-canvas-container");
-
+  let canvas = createCanvas(800, 500);
+  canvas.parent ("p5-canvas-container");
+  sharkY = random(height / 2, height - 100); // initial shark Y position
 }
 
 function draw() {
@@ -39,7 +42,7 @@ function draw() {
     }
   }
   let wave = cos(frameCount * 0.05) * 50;
-  let fishY = (height / 3) * 2 + wave;
+  fishY = (height / 3) * 2 + wave;
   fishX += 2;
   if (fishX > width + 100) {
     fishX = -100;
@@ -67,13 +70,26 @@ function draw() {
     rotate(radians(wiggleAngle));
     translate(-fishX, -fishY);
   }
-  drawCreature(fishX, (height / 3) * 2 + wave, "orange");
+  drawCreature(fishX, fishY, "orange");
   pop();
+  if (bubbleVisible) {
+    fill(173, 216, 230, 180);
+    noStroke();
+    circle(bubbleX, bubbleY, 15);
+    bubbleY -= 2;
+
+    if (bubbleY < -20) {
+      bubbleVisible = false;
+    }
+  }
   drawSeaweed("lime");
 }
 
 function mousePressed() {
   sharkVisible = false;
+  bubbleX = mouseX;
+  bubbleY = mouseY;
+  bubbleVisible = true;
 }
 function mouseReleased() {
   sharkVisible = true;
@@ -155,5 +171,6 @@ function drawSeaweed(seaweedColor) {
     endShape();
   }
 }
+
 
 
